@@ -16,6 +16,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.medicinepro.R
+import com.example.medicinepro.di.FakeModule
 import com.example.medicinepro.ui.components.ExButton
 import com.example.medicinepro.ui.components.ExTextField
 import com.example.medicinepro.ui.theme.MedicineProTheme
@@ -32,12 +35,19 @@ import com.example.medicinepro.ui.theme.MedicineProTheme
 @Composable
 private fun Preview() {
     MedicineProTheme {
-        FillProfileScreen()
+        FillProfileScreen(viewModel = FakeModule.provideRegisterViewModel())
     }
 }
 
 @Composable
-fun FillProfileScreen(modifier: Modifier = Modifier) {
+fun FillProfileScreen(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
+
+    val nickname by viewModel.nickname.collectAsState()
+    val phoneNumber by viewModel.phoneNumber.collectAsState()
+    val dateOfBirth by viewModel.dateOfBirth.collectAsState()
+    val gender by viewModel.gender.collectAsState()
+
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -59,7 +69,7 @@ fun FillProfileScreen(modifier: Modifier = Modifier) {
             }
             Text(
                 "Fill Your Profile",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleMedium
             )
         }
         ConstraintLayout(
@@ -90,16 +100,17 @@ fun FillProfileScreen(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(start = 12.dp, end = 12.dp)
 
-        ExTextField(modifier = defaultModifier, text = "", placeHolder = "Name") { }
-        ExTextField(modifier = defaultModifier, text = "", placeHolder = "Nickname") { }
-        ExTextField(modifier = defaultModifier, text = "", placeHolder = "Email") { }
+        ExTextField(modifier = defaultModifier, text = nickname, placeHolder = "Nickname") { }
+        ExTextField(modifier = defaultModifier, text = phoneNumber, placeHolder = "Phone Number") { }
         ExTextField(
             modifier = defaultModifier,
-            text = "",
+            text = dateOfBirth,
             placeHolder = "Date of birth",
             painter = painterResource(R.drawable.ic_calendar)
         ) { }
-        ExTextField(modifier = defaultModifier, text = "", placeHolder = "Gender") { }
-        ExButton(modifier = defaultModifier, text = "Save") { }
+        ExTextField(modifier = defaultModifier, text = gender, placeHolder = "Gender") { }
+        ExButton(modifier = defaultModifier, text = "Save") {
+            viewModel.saveUser()
+        }
     }
 }

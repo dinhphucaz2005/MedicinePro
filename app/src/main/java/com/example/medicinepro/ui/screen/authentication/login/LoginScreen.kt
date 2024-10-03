@@ -18,18 +18,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medicinepro.R
 import com.example.medicinepro.di.FakeModule
 import com.example.medicinepro.ui.components.ExButton
 import com.example.medicinepro.ui.components.ExTextField
+import com.example.medicinepro.ui.components.PasswordField
 import com.example.medicinepro.ui.theme.MedicineProTheme
 
 @Preview
@@ -42,6 +47,11 @@ private fun Preview() {
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
+
+    //Collecting states from viewmodel
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -54,27 +64,25 @@ fun LoginScreen(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
             painter = painterResource(R.drawable.ic_logo), contentDescription = null,
             modifier = Modifier.size(66.dp)
         )
-        Text("HealthPal")
-        Text("Hi, Welcome Back!")
-        Text("Hope you're doing fine.")
+        Text("HealthPal", style = MaterialTheme.typography.titleLarge)
+        Text("Hi, Welcome Back!", style = MaterialTheme.typography.titleMedium)
+        Text("Hope you're doing fine.", style = MaterialTheme.typography.titleSmall)
         ExTextField(
-            text = "", placeHolder = "Your Email",
+            text = email, placeHolder = "Your Email",
             modifier = Modifier
-                .fillMaxWidth()
-        ) { }
-        ExTextField(
-            text = "", placeHolder = "Your Email",
-            modifier = Modifier
-                .fillMaxWidth()
-        ) { }
+                .fillMaxWidth(),
+            painter = painterResource(R.drawable.ic_email)
+        ) { viewModel.onEmailChange(it) }
+        PasswordField(
+            text = password,
+            modifier = Modifier.fillMaxWidth()
+        ) { viewModel.onPasswordChange(it) }
         ExButton(
             Modifier
                 .fillMaxWidth()
                 .height(48.dp),
             "Sign In"
-        ) {
-
-        }
+        ) {viewModel.requestSignIn()}
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,7 +141,32 @@ fun LoginScreen(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
                 modifier = Modifier.padding(start = 12.dp)
             )
         }
-        Text("Forgot password?", color = Color(0xFF1c64f2))
-        Text("Don’t have an account yet? Sign up")
+        Text(
+            "Forgot password?",
+            color = Color(0xFF1c64f2),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        val annotatedText = buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
+                    fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                )
+            ) {
+                append("Don’t have an account yet? ")
+            }
+            withStyle(
+                style = SpanStyle(
+                    color = Color(0xFF1c64f2),
+                    fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
+                    fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                )
+            ) {
+                append("Sign up")
+            }
+        }
+        Text(annotatedText)
     }
 }

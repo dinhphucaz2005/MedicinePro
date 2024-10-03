@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,28 +19,40 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.medicinepro.R
+import com.example.medicinepro.di.FakeModule
 import com.example.medicinepro.ui.components.ExButton
 import com.example.medicinepro.ui.components.ExTextField
+import com.example.medicinepro.ui.components.PasswordField
 import com.example.medicinepro.ui.theme.MedicineProTheme
 
 @Preview
 @Composable
 private fun Preview() {
     MedicineProTheme {
-        RegisterScreen()
+        RegisterScreen(viewModel = FakeModule.provideRegisterViewModel())
     }
 }
 
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier) {
+fun RegisterScreen(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
+
+    val name by viewModel.name.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,35 +65,31 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
             painter = painterResource(R.drawable.ic_logo), contentDescription = null,
             modifier = Modifier.size(66.dp)
         )
-        Text("HealthPal")
-        Text("Create Account")
-        Text("We are here to help you!")
-        ExTextField(
-            text = "", placeHolder = "Your Name",
-            modifier = Modifier
-                .fillMaxWidth()
-        ) { }
-        ExTextField(
-            text = "", placeHolder = "Your Email",
-            modifier = Modifier
-                .fillMaxWidth()
-        ) { }
-        ExTextField(
-            text = "", placeHolder = "Your Email",
-            modifier = Modifier
-                .fillMaxWidth()
-        ) { }
-        ExButton(
-            Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            "Create Account"
-        ) {
+        Text("HealthPal", style = MaterialTheme.typography.titleLarge)
+        Text("Create Account", style = MaterialTheme.typography.titleMedium)
+        Text("We are here to help you!", style = MaterialTheme.typography.titleSmall)
 
+        val defaultModifier = Modifier.fillMaxWidth()
+
+        ExTextField(
+            text = name, placeHolder = "Name",
+            painter = painterResource(R.drawable.ic_person),
+            modifier = defaultModifier
+        ) { viewModel.onNameChange(it) }
+        ExTextField(
+            text = email, placeHolder = "Email",
+            painter = painterResource(R.drawable.ic_email),
+            modifier = defaultModifier
+        ) { viewModel.onEmailChange(it) }
+        PasswordField(text = password, modifier = defaultModifier) {
+            viewModel.onPasswordChange(it)
         }
+        ExButton(
+            modifier = defaultModifier,
+            "Create Account"
+        ) { viewModel.onRegisterClick() }
         ConstraintLayout(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = defaultModifier
         ) {
             val (textRef, ref1, ref2) = createRefs()
 
@@ -105,7 +114,7 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
         }
         Button(
             onClick = {},
-            modifier.fillMaxWidth(),
+            modifier = defaultModifier,
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.tertiary),
             colors = ButtonDefaults.buttonColors(
@@ -114,7 +123,7 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
         ) {
             Image(painter = painterResource(R.drawable.ic_google), contentDescription = null)
             Text(
-                "Sign In with Google",
+                "Continue with Google",
                 color = Color.Black,
                 modifier = Modifier.padding(start = 12.dp)
             )
@@ -122,7 +131,7 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {},
-            modifier.fillMaxWidth(),
+            modifier = defaultModifier,
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.tertiary),
             colors = ButtonDefaults.buttonColors(
@@ -131,11 +140,32 @@ fun RegisterScreen(modifier: Modifier = Modifier) {
         ) {
             Image(painter = painterResource(R.drawable.ic_facebook), contentDescription = null)
             Text(
-                "Sign In with Facebook",
+                "Continue with Facebook",
                 color = Color.Black,
                 modifier = Modifier.padding(start = 12.dp)
             )
         }
-        Text("Do you have an account ? Sign In")
+        val annotatedText = buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
+                    fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                )
+            ) {
+                append("Do you have an account ? ")
+            }
+            withStyle(
+                style = SpanStyle(
+                    color = Color(0xFF1c64f2),
+                    fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
+                    fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                )
+            ) {
+                append("Sign In")
+            }
+        }
+        Text(annotatedText)
     }
 }
