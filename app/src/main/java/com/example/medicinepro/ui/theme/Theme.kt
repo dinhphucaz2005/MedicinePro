@@ -9,8 +9,9 @@ import androidx.compose.ui.graphics.Color
 private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFF1C2A3A),
     secondary = Color(0xFFffffff),
-    tertiary = Color(0xff9CA3AF),
-    primaryContainer = Color(0xFFf9fafb)
+    tertiary = Color(0xff6B7280),
+    primaryContainer = Color(0xFFf9fafb),
+    surface = Color(0xFFffffff),
 )
 
 @Composable

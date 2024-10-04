@@ -1,6 +1,7 @@
 package com.example.medicinepro.di
 
 import com.example.medicinepro.domain.repository.AuthenticationRepository
+import com.example.medicinepro.ui.screen.authentication.forget.ForgetPasswordViewModel
 import com.example.medicinepro.ui.screen.authentication.login.LoginViewModel
 import com.example.medicinepro.ui.screen.authentication.register.RegisterViewModel
 
@@ -18,6 +19,10 @@ object FakeModule {
 
     fun provideRegisterViewModel(): RegisterViewModel {
         return RegisterViewModel(authenticationRepository)
+    }
+
+    fun provideForgetPasswordViewModel(): ForgetPasswordViewModel {
+        return ForgetPasswordViewModel(authenticationRepository)
     }
 
 }

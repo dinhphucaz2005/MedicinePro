@@ -22,8 +22,8 @@ private fun Preview() {
     MedicineProTheme {
 
         PasswordField(
-            Modifier.fillMaxWidth(),
-            ""
+            modifier = Modifier.fillMaxWidth(),
+            text = ""
         ) {}
     }
 }
@@ -32,6 +32,7 @@ private fun Preview() {
 @Composable
 fun PasswordField(
     modifier: Modifier = Modifier,
+    placeHolder: String = "Password",
     text: String,
     onValueChange: (String) -> Unit,
 ) {
@@ -55,7 +56,7 @@ fun PasswordField(
         },
         value = text,
         placeholder = {
-            Text("Password", color = MaterialTheme.colorScheme.tertiary)
+            Text(placeHolder, color = MaterialTheme.colorScheme.tertiary)
         },
         shape = RoundedCornerShape(8.dp),
         colors = outlineTextFieldDefaultColor,

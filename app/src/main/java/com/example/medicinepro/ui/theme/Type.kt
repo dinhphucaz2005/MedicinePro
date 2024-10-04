@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.example.medicinepro.R
 
 val interFont = FontFamily(
+    Font(R.font.inter_bold, FontWeight.Bold),
     Font(R.font.inter_black, FontWeight.Black),
     Font(R.font.inter_semibold, FontWeight.SemiBold),
     Font(R.font.inter_medium, FontWeight.Medium),
@@ -33,9 +34,35 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
+    bodyLarge = TextStyle(
+        fontFamily = interFont,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp
+    ),
     bodyMedium = TextStyle(
         fontFamily = interFont,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = interFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp
+    ),
+    displayLarge = TextStyle(
+        fontFamily = interFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 20.sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = interFont,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = interFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp
     )
+
 )

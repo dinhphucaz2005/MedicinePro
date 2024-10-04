@@ -52,6 +52,4 @@ class RegisterViewModel @Inject constructor(
     fun saveUser() {
         TODO("Not yet implemented")
     }
-
-
 }

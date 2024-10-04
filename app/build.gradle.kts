@@ -70,15 +70,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Navigation for Compose
-    implementation("androidx.navigation:navigation-compose:2.8.1")
-
     //Room Database
     implementation("androidx.room:room-runtime:2.6.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.09.02"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.09.03"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
     //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:2.6.1")
 
@@ -93,10 +91,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
 
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.8.1")
-
-    //Edit tag audio
-    implementation("com.mpatric:mp3agic:0.9.1")
+    implementation("androidx.navigation:navigation-compose:2.8.2")
 
     //EventBus
     implementation("org.greenrobot:eventbus:3.3.1")
