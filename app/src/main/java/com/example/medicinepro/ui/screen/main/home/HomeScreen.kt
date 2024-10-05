@@ -41,7 +41,6 @@ private fun Preview() {
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
 
-
     val defaultModifier = Modifier.fillMaxWidth()
 
     LazyColumn(
@@ -52,21 +51,25 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
-            Text("Location")
+            Text("Location", color = MaterialTheme.colorScheme.primary)
         }
         item {
             Row(
                 modifier = defaultModifier
             ) {
-                Icon(imageVector = Icons.Default.LocationOn, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Default.LocationOn, contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
                 Text(
                     "Ho Chi Minh, Viet Nam",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.primary
                 )
                 Icon(
                     painter = painterResource(R.drawable.ic_notification),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }

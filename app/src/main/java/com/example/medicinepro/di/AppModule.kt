@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
 import javax.inject.Singleton
 
 @Module
@@ -23,8 +24,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthenticationRepository(): AuthenticationRepository {
-        return AuthenticationRepositoryImpl()
+    fun provideAuthenticationRepository(httpClient: HttpClient): AuthenticationRepository {
+        return AuthenticationRepositoryImpl(httpClient)
     }
 
 
