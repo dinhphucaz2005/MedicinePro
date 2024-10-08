@@ -1,6 +1,8 @@
 package com.example.medicinepro.di
 
 import com.example.medicinepro.BuildConfig
+import com.example.medicinepro.data.remote.SongApiImpl
+import com.example.medicinepro.domain.service.SongApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,4 +41,11 @@ object NetworkModule {
             }
         }
     }
+
+    @Provides
+    @Singleton
+    fun provideSongApi(httpClient: HttpClient): SongApi {
+        return SongApiImpl(httpClient)
+    }
+
 }

@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.medicinepro.ui.screen.navigation.Routes
 import com.example.medicinepro.ui.screen.navigation.mainNavGraph
@@ -66,9 +68,27 @@ fun MainScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ExBottomBar(modifier: Modifier = Modifier, navHostController: NavHostController? = null) {
+fun ExBottomBar(modifier: Modifier = Modifier, navHostController: NavHostController) {
 
-    var currentRoute by remember { mutableStateOf(Routes.HOME) }
+
+    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+
+    var currentRoute by remember { mutableStateOf(Routes.HOME.name) }
+
+    val newRoute = when (navBackStackEntry?.destination?.route) {
+        Routes.HOME.name -> Routes.HOME.name
+        Routes.LOCATION.name -> Routes.LOCATION.name
+        Routes.DATE.name -> Routes.DATE.name
+        Routes.USER.name -> Routes.USER.name
+        else -> currentRoute
+    }
+
+    LaunchedEffect(newRoute) {
+        if (newRoute != currentRoute) {
+            currentRoute = newRoute
+        }
+    }
+
 
     val items = listOf(Routes.HOME, Routes.LOCATION, Routes.DATE, Routes.USER)
 
@@ -88,28 +108,39 @@ fun ExBottomBar(modifier: Modifier = Modifier, navHostController: NavHostControl
                         .fillMaxHeight()
                         .weight(1f)
                         .clickable {
-                            if (currentRoute != route) {
-                                currentRoute = route
-                                navHostController?.navigate(route.name) {
-                                    popUpTo(Routes.HOME.name) { inclusive = false }
+                            if (currentRoute == route.name)
+                                return@clickable
+                            when (route) {
+                                Routes.HOME -> {
+                                    navHostController.navigate(route.name) {
+                                        popUpTo(Routes.HOME.name) { inclusive = true }
+                                        launchSingleTop = true
+                                    }
+                                }
+
+                                else -> {
+                                    navHostController.navigate(route.name) {
+                                        popUpTo(Routes.HOME.name) { inclusive = false }
+                                        launchSingleTop = true
+                                    }
                                 }
                             }
                         },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(if (currentRoute == route) route.selectedIcon!! else route.icon!!),
+                        painter = painterResource(if (currentRoute == route.name) route.selectedIcon!! else route.icon!!),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxHeight()
                             .aspectRatio(1f)
                             .padding(12.dp)
                             .background(
-                                if (currentRoute == route) Color(0xFFf3f4f6) else Color.Transparent,
+                                if (currentRoute == route.name) Color(0xFFf3f4f6) else Color.Transparent,
                                 CircleShape
                             )
                             .padding(12.dp),
-                        tint = if (currentRoute == route) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
+                        tint = if (currentRoute == route.name) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary
                     )
                 }
             }
